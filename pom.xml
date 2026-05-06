@@ -46,8 +46,15 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId><!-- можно использовать, пока нет hibernate -->
-            <artifactId>spring-boot-devtools</artifactId>
+            <artifactId>spring-boot-devtools</artifactId><!-- Быстрая "перезборка" Ctrl + F9 -->
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId><!-- Важно не забыть включить Annotation Processors -->
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

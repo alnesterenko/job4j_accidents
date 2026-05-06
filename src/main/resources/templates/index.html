@@ -4,7 +4,35 @@
 <body>
 <div th:include="fragments/navigation :: navigation"></div>
 <div class="container content">
-    <h1>Это начальная страница проекта job4j_accidents</h1>
+    <div class="row">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Название</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Адрес</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="accident: ${accidents}">
+                <td><a th:text="${accident.id}"
+                       style="display: block; text-decoration: none; color: inherit;"
+                       href="#" onclick="event.preventDefault();"/></td>
+                <td><a th:text="${accident.name}"
+                       style="display: block; text-decoration: none; color: inherit;"
+                       href="#" onclick="event.preventDefault();"/></td>
+                <td><a th:text="${accident.text}"
+                       style="display: block; text-decoration: none; color: inherit;"
+                       href="#" onclick="event.preventDefault();"/></td>
+                <td><a th:text="${accident.address}"
+                       style="display: block; text-decoration: none; color: inherit;"
+                       href="#" onclick="event.preventDefault();"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <div th:include="fragments/footer :: footer"></div>
 </body>
