@@ -11,6 +11,7 @@ public class IndexController {
     @GetMapping({"/", "/index"})
     public String getIndex(Model model) {
         model.addAttribute("pageTitle", "Начальная страница");
+        model.addAttribute("user", "Petr Arsentev");
         return "index";
     }
 }

@@ -4,6 +4,23 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">job4j_accidents</a>
+
+                <div class="container-fluid">
+                    <!-- Первый блок: три ссылки слева -->
+                    <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <a class="nav-item nav-link text-primary active" href="/">Главная</a>
+                        <a class="nav-item nav-link text-primary active" href="#" onclick="event.preventDefault();">Не главная</a>
+                        <a class="nav-item nav-link text-primary active" href="#" onclick="event.preventDefault();">Дополнительная</a>
+                    </div>
+
+                    <!-- Второй блок: две ссылки справа -->
+                    <div class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <a class="nav-item nav-link text-secondary active" href="#" onclick="event.preventDefault();">Просто ссылка</a>
+                        <a class="nav-item nav-link text-secondary active" href="#" onclick="event.preventDefault();" th:text="${user}">Имя пользователя</a>
+                    </div>
+                </div>
+
+
             <!--<div class="d-flex" th:if="${user.name == 'Гость'}">
                 <a class="nav-link text-secondary me-3" th:href="@{/users/register}">Регистрация</a>
                 <a class="nav-link text-secondary" th:href="@{/users/login}">Войти</a>
