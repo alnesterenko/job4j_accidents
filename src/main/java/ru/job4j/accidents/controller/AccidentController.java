@@ -7,33 +7,31 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.service.AccidentService;
-
-import java.util.ArrayList;
-import java.util.List;
+import ru.job4j.accidents.service.AccidentTypeService;
 
 @Controller
 public class AccidentController {
 
     private final AccidentService accidents;
 
-    private final List<AccidentType> accidentTypeList;
+    private final AccidentTypeService typeService;
 
-    public AccidentController(AccidentService simpleAccidentService) {
+    public AccidentController(AccidentService simpleAccidentService, AccidentTypeService simpleAccidentTypeService) {
         this.accidents = simpleAccidentService;
-        this.accidentTypeList = createAccidentTypeList();
+        this.typeService = simpleAccidentTypeService;
     }
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
         model.addAttribute("pageTitle", "Создание инцидента");
-        model.addAttribute("types", accidentTypeList);
+        model.addAttribute("types", typeService.findAll());
         return "accident/createAccident";
     }
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident) {
+        /* Так как магия Spring не срабатывает, приходится пользоваться этим методом */
         setCorrectType(accident);
         accidents.add(accident);
         return "redirect:/index";
@@ -48,28 +46,20 @@ public class AccidentController {
         }
         model.addAttribute("pageTitle", "Редактирование инцидента");
         model.addAttribute("accident", accidentOptional.get());
-        model.addAttribute("types", accidentTypeList);
+        model.addAttribute("types", typeService.findAll());
         return "accident/editAccident";
     }
 
     @PostMapping("/updateAccident")
     public String update(@ModelAttribute Accident accident) {
+        /* Так как магия Spring не срабатывает, приходится пользоваться этим методом */
         setCorrectType(accident);
         accidents.update(accident.getId(), accident);
         return "redirect:/";
     }
 
-    private List<AccidentType> createAccidentTypeList() {
-        List<AccidentType> types = new ArrayList<>();
-        types.add(new AccidentType(1, "Две машины"));
-        types.add(new AccidentType(2, "Машина и человек"));
-        types.add(new AccidentType(3, "Машина и велосипед"));
-        types.add(new AccidentType(4, "Два велосипеда"));
-        return types;
-    }
-
     private void setCorrectType(Accident accident) {
         int typeId = accident.getType().getId();
-        accident.setType(accidentTypeList.get(typeId - 1));
+        accident.setType(typeService.findById(typeId).orElse(null));
     }
 }

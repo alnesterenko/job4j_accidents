@@ -15,26 +15,29 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class AccidentMem implements AccidentRepository {
 
+    private final AccidentTypeRepository typeRepository;
+
     private int nextId = 1;
 
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
-    public AccidentMem() {
+    public AccidentMem(AccidentTypeRepository accidentTypeMem) {
+        this.typeRepository = accidentTypeMem;
         add(new Accident(0,
                 "Столкновение велосипедистов",
-                "Два велосипедиста столкнулись лбами на велосипедной дорожке. Оба дебила думали, что другой ОБЯЗАН уступить дорогу.",
+                "Два велосипедиста столкнулись лбами на велосипедной дорожке. Оба барана думали, что другой ОБЯЗАН уступить дорогу.",
                 "Велосипедная дорожка",
-                new AccidentType(4, "Два велосипеда")));
+                typeRepository.findById(4).orElse(null)));
         add(new Accident(0,
                 "Потеря груза",
                 "Осенизатор разлил большую часть своего \"драгоценного\" груза",
                 "На въезде в посёлок",
-                new AccidentType(2, "Машина и человек")));
+                typeRepository.findById(2).orElse(null)));
         add(new Accident(0,
                 "Пробитие бачка",
                 "Ярик, во время гасания по сельской дороге, пробил бачок",
                 "Сельская дорога",
-                new AccidentType(2, "Машина и человек")));
+                typeRepository.findById(2).orElse(null)));
     }
 
     @Override
