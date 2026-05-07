@@ -3,6 +3,7 @@ package ru.job4j.accidents.repository;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.AccidentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +23,18 @@ public class AccidentMem implements AccidentRepository {
         add(new Accident(0,
                 "Столкновение велосипедистов",
                 "Два велосипедиста столкнулись лбами на велосипедной дорожке. Оба дебила думали, что другой ОБЯЗАН уступить дорогу.",
-                "Велосипедная дорожка"));
+                "Велосипедная дорожка",
+                new AccidentType(4, "Два велосипеда")));
         add(new Accident(0,
                 "Потеря груза",
                 "Осенизатор разлил большую часть своего \"драгоценного\" груза",
-                "На въезде в посёлок"));
+                "На въезде в посёлок",
+                new AccidentType(2, "Машина и человек")));
         add(new Accident(0,
                 "Пробитие бачка",
                 "Ярик, во время гасания по сельской дороге, пробил бачок",
-                "Сельская дорога"));
+                "Сельская дорога",
+                new AccidentType(2, "Машина и человек")));
     }
 
     @Override
@@ -42,7 +46,14 @@ public class AccidentMem implements AccidentRepository {
 
     @Override
     public boolean update(Integer id, Accident accident) {
-        return accidents.computeIfPresent(id, (key, value) -> new Accident(id, accident.getName(), accident.getText(), accident.getAddress())) != null;
+        return accidents.computeIfPresent(
+                id,
+                (key, value) -> new Accident(
+                        id,
+                        accident.getName(),
+                        accident.getText(),
+                        accident.getAddress(),
+                        accident.getType())) != null;
     }
 
     @Override

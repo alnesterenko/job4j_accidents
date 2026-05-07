@@ -24,6 +24,15 @@
                     <label for="address">Адрес *</label>
                     <input type="text" class="form-control" name="address" id="address" th:field="*{address}" th:value="*{address}" required>
                 </div>
+                <div class="form-group">
+                    <label for="type.id">Тип</label>
+                    <select class="form-control" id="type.id"  name="type.id">
+                        <option th:each="type: ${types}"
+                                th:text="${type.name}"
+                                th:value="${type.id}"
+                                th:selected="${type.id} == ${accident.type.id}"></option>
+                    </select>
+                </div>
                 <div class="col-6 py-3">
                     * поля обязательные к заполнению
                 </div>
