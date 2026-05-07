@@ -12,8 +12,11 @@
                         <a class="nav-item nav-link text-primary active" href="#" onclick="event.preventDefault();">Не главная</a>
                         <a class="nav-item nav-link text-primary active" href="#" onclick="event.preventDefault();">Дополнительная</a>
                     </div>
-
-                    <!-- Второй блок: две ссылки справа -->
+                    <!-- Второй блок: кнопка посредине -->
+                    <div class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <a class="btn btn-primary w-100" href="/createAccident">Добавить инцидент</a>
+                    </div>
+                    <!-- Третий блок: две ссылки справа -->
                     <div class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <a class="nav-item nav-link text-secondary active" href="#" onclick="event.preventDefault();">Просто ссылка</a>
                         <a class="nav-item nav-link text-secondary active" href="#" onclick="event.preventDefault();" th:text="${user}">Имя пользователя</a>
