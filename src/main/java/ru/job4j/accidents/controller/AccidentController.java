@@ -24,25 +24,8 @@ public class AccidentController {
     }
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident, Model model) {
-        if (!validate(accident)) {
-            model.addAttribute("message", "Все поля должны быть заполнены!");
-            return "accident/createAccident";
-        }
+    public String save(@ModelAttribute Accident accident) {
         accidents.add(accident);
         return "redirect:/index";
-    }
-
-    private boolean validate(Accident accident) {
-        boolean valid = true;
-        var name = accident.getName();
-        var text = accident.getText();
-        var address = accident.getAddress();
-        if ((name == null || name.isBlank())
-                || (text == null || text.isBlank())
-                || (address == null || address.isBlank())) {
-            valid = false;
-        }
-        return valid;
     }
 }
