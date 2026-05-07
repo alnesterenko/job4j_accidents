@@ -9,7 +9,7 @@
             Новый инцидент
         </div>
         <div class="card-body">
-            <form th:action="@{/editAccident}" method="POST" enctype="multipart/form-data" th:object="${accident}">
+            <form th:action="@{/updateAccident}" method="POST" enctype="multipart/form-data" th:object="${accident}">
                 <input type="hidden" name="id"  th:field="*{id}" th:value="*{id}">
 
                 <div class="form-group">

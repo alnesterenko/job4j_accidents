@@ -8,6 +8,7 @@
         <table class="table table-hover">
             <thead>
             <tr>
+                <th scope="col"></th>
                 <th scope="col">#</th>
                 <th scope="col">Название</th>
                 <th scope="col">Описание</th>
@@ -17,18 +18,23 @@
             <tbody>
 
             <tr th:each="accident: ${accidents}">
+                <td>
+                    <a th:href="@{|/formUpdateAccident?id=${accident.id}|}">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                </td>
                 <td><a th:text="${accident.id}"
                        style="display: block; text-decoration: none; color: inherit;"
-                       href="#" onclick="event.preventDefault();"/></td>
+                       th:href="@{|/formUpdateAccident?id=${accident.id}|}"/></td>
                 <td><a th:text="${accident.name}"
                        style="display: block; text-decoration: none; color: inherit;"
-                       href="#" onclick="event.preventDefault();"/></td>
+                       th:href="@{|/formUpdateAccident?id=${accident.id}|}"/></td>
                 <td><a th:text="${accident.text}"
                        style="display: block; text-decoration: none; color: inherit;"
-                       href="#" onclick="event.preventDefault();"/></td>
+                       th:href="@{|/formUpdateAccident?id=${accident.id}|}"/></td>
                 <td><a th:text="${accident.address}"
                        style="display: block; text-decoration: none; color: inherit;"
-                       href="#" onclick="event.preventDefault();"/></td>
+                       th:href="@{|/formUpdateAccident?id=${accident.id}|}"/></td>
             </tr>
             </tbody>
         </table>
