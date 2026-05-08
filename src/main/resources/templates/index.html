@@ -14,6 +14,7 @@
                 <th scope="col">Описание</th>
                 <th scope="col">Адрес</th>
                 <th scope="col">Тип</th>
+                <th scope="col">Статьи</th>
             </tr>
             </thead>
             <tbody>
@@ -39,6 +40,9 @@
                 <td><a th:text="${accident.type.name}"
                        style="display: block; text-decoration: none; color: inherit;"
                        th:href="@{|/formUpdateAccident?id=${accident.id}|}"/></td>
+                <td><a th:each="rule : ${accident.rules}"
+                       style="display: block; text-decoration: none; color: inherit;"
+                       th:href="@{|/formUpdateAccident?id=${accident.id}|}"><span th:text="${rule.name} + ', '"></span><br/></a></td>
             </tr>
             </tbody>
         </table>

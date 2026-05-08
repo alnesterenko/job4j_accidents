@@ -9,7 +9,7 @@
             Новый инцидент
         </div>
         <div class="card-body">
-            <form th:action="@{/saveAccident}" method="POST" enctype="multipart/form-data">
+            <form th:action="@{/saveAccident}" method="POST" th:object="${accident}">
                 <input type="hidden" name="id" value="0">
 
                 <div class="form-group">
@@ -18,19 +18,27 @@
                 </div>
                 <div class="form-group">
                     <label for="text">Описание *</label>
-                    <textarea class="form-control" name="text" id="text"  rows="5" required></textarea>
+                    <textarea class="form-control" name="text" id="text" rows="5" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="address">Адрес *</label>
                     <input type="text" class="form-control" name="address" id="address" required>
                 </div>
                 <div class="form-group">
-                    <label for="type.id">Тип</label>
+                    <label for="type">Тип</label>
                     <!-- Немного магии Spring, но она не работает -->
-                    <select class="form-control" id="type.id"  name="type.id">
+                    <select class="form-control" id="type" name="type.id">
                         <option th:each="type: ${types}"
-                                th:text="${type.name}"
-                                th:value="${type.id}"></option>
+                                th:value="${type.id}"
+                                th:text="${type.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rulesIds" name="rIds">Статья (можно выбрать несколько зажав Ctrl)</label>
+                    <select class="form-control" id="rulesIds" name="rulesIds" multiple>
+                        <option th:each="rule : ${rules}"
+                                th:text="${rule.name}"
+                                th:value="${rule.id}"></option>
                     </select>
                 </div>
                 <div class="col-6 py-3">

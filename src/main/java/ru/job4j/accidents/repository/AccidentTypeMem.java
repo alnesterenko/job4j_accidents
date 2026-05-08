@@ -2,7 +2,6 @@ package ru.job4j.accidents.repository;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
-import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
 
 import java.util.ArrayList;
@@ -10,12 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 @Repository
 public class AccidentTypeMem implements AccidentTypeRepository {
 
-    private int nextId = 1;
+    private AtomicInteger nextId = new AtomicInteger(1);
 
     private final Map<Integer, AccidentType> accidentTypes = new ConcurrentHashMap<>();
 
@@ -30,7 +30,7 @@ public class AccidentTypeMem implements AccidentTypeRepository {
 
     @Override
     public AccidentType add(AccidentType accidentType) {
-        accidentType.setId(nextId++);
+        accidentType.setId(nextId.getAndIncrement());
         accidentTypes.put(accidentType.getId(), accidentType);
         return accidentType;
     }

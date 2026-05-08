@@ -34,6 +34,15 @@
                                 th:selected="${type.id} == ${accident.type.id}"></option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="rulesIds" name="rIds">Статья (можно выбрать несколько зажав Ctrl)</label>
+                    <select class="form-control" id="rulesIds" name="rulesIds" multiple>
+                        <option th:each="rule : ${rules}"
+                                th:text="${rule.name}"
+                                th:value="${rule.id}"
+                                th:selected="${accident.rules.contains(rule)}"></option>
+                    </select>
+                </div>
                 <div class="col-6 py-3">
                     * поля обязательные к заполнению
                 </div>

@@ -3,13 +3,10 @@ package ru.job4j.accidents.repository;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.model.AccidentType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 @Repository
@@ -17,32 +14,40 @@ public class AccidentMem implements AccidentRepository {
 
     private final AccidentTypeRepository typeRepository;
 
-    private int nextId = 1;
+    private final AccidentRuleRepository ruleRepository;
+
+    private AtomicInteger nextId = new AtomicInteger(1);
 
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
-    public AccidentMem(AccidentTypeRepository accidentTypeMem) {
+    public AccidentMem(AccidentTypeRepository accidentTypeMem,
+                       AccidentRuleRepository ruleMem) {
         this.typeRepository = accidentTypeMem;
+        this.ruleRepository = ruleMem;
+
         add(new Accident(0,
                 "Столкновение велосипедистов",
                 "Два велосипедиста столкнулись лбами на велосипедной дорожке. Оба барана думали, что другой ОБЯЗАН уступить дорогу.",
                 "Велосипедная дорожка",
-                typeRepository.findById(4).orElse(null)));
+                typeRepository.findById(4).orElse(null),
+                ruleRepository.findAllByIds(Set.of(1, 3))));
         add(new Accident(0,
                 "Потеря груза",
                 "Осенизатор разлил большую часть своего \"драгоценного\" груза",
                 "На въезде в посёлок",
-                typeRepository.findById(2).orElse(null)));
+                typeRepository.findById(2).orElse(null),
+                ruleRepository.findAllByIds(Set.of(5, 6))));
         add(new Accident(0,
                 "Пробитие бачка",
                 "Ярик, во время гасания по сельской дороге, пробил бачок",
                 "Сельская дорога",
-                typeRepository.findById(2).orElse(null)));
+                typeRepository.findById(2).orElse(null),
+                ruleRepository.findAllByIds(Set.of(4, 5, 6))));
     }
 
     @Override
     public Accident add(Accident accident) {
-        accident.setId(nextId++);
+        accident.setId(nextId.getAndIncrement());
         accidents.put(accident.getId(), accident);
         return accident;
     }
@@ -56,7 +61,8 @@ public class AccidentMem implements AccidentRepository {
                         accident.getName(),
                         accident.getText(),
                         accident.getAddress(),
-                        accident.getType())) != null;
+                        accident.getType(),
+                        accident.getRules())) != null;
     }
 
     @Override
