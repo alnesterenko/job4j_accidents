@@ -14,8 +14,8 @@ public class SimpleAccidentService implements AccidentService {
 
     private final AccidentRepository accidentRepository;
 
-    public SimpleAccidentService(AccidentRepository accidentMem) {
-        this.accidentRepository = accidentMem;
+    public SimpleAccidentService(AccidentRepository accidentJdbcTemplateRepository) {
+        this.accidentRepository = accidentJdbcTemplateRepository;
     }
 
     @Override
