@@ -2,16 +2,12 @@ package ru.job4j.accidents.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.service.AccidentRuleService;
 import ru.job4j.accidents.service.AccidentService;
 import ru.job4j.accidents.service.AccidentTypeService;
 
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -32,6 +28,16 @@ public class AccidentController {
         this.ruleService = simpleAccidentRuleService;
     }
 
+    /* Начальная страница. Общий список автопроишествий. */
+    @GetMapping({"/", "/index"})
+    public String getIndex(Model model) {
+        model.addAttribute("pageTitle", "Начальная страница");
+        model.addAttribute("user", "Petr Arsentev");
+        model.addAttribute("accidents", accidentService.findAll());
+        return "index";
+    }
+
+    /* Создание автопроишествия */
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
         model.addAttribute("pageTitle", "Создание инцидента");
@@ -43,14 +49,19 @@ public class AccidentController {
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident,
-                       @RequestParam(value = "rulesIds", required = false) Set<Integer> rulesIds) {
+                       @RequestParam(value = "rulesIds", required = false) Set<Integer> rulesIds,
+                       Model model) {
         accident.setRules(ruleService.findAllByIds(rulesIds));
-        /* Так как магия Spring не срабатывает, приходится пользоваться этим методом */
-        setCorrectType(accident);
-        accidentService.add(accident);
-        return "redirect:/index";
+        try {
+            accidentService.add(accident);
+            return "redirect:/index";
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            return "errors/404";
+        }
     }
 
+    /* Редактирование автопроишествия */
     @GetMapping("/formUpdateAccident")
     public String update(@RequestParam("id") int id, Model model) {
         var accidentOptional = accidentService.findById(id);
@@ -67,16 +78,30 @@ public class AccidentController {
 
     @PostMapping("/updateAccident")
     public String update(@ModelAttribute Accident accident,
-                         @RequestParam(value = "rulesIds", required = false) Set<Integer> rulesIds) {
-        accident.setRules(ruleService.findAllByIds(rulesIds));
-        /* Так как магия Spring не срабатывает, приходится пользоваться этим методом */
-        setCorrectType(accident);
-        accidentService.update(accident.getId(), accident);
-        return "redirect:/";
+                         @RequestParam(value = "rulesIds", required = false) Set<Integer> rulesIds,
+                         Model model) {
+        try {
+            accident.setRules(ruleService.findAllByIds(rulesIds));
+            var isUpdated = accidentService.update(accident.getId(), accident);
+            if (!isUpdated) {
+                model.addAttribute("message", "Автопроишествие с указанным идентификатором не найдено !");
+                return "errors/404";
+            }
+            return "redirect:/";
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            return "errors/404";
+        }
     }
 
-    private void setCorrectType(Accident accident) {
-        int typeId = accident.getType().getId();
-        accident.setType(typeService.findById(typeId).orElse(null));
+    /* Удаление автопроишествия */
+    @GetMapping("/deleteAccident")
+    public String delete(@RequestParam("id") int id, Model model) {
+        var isDeleted = accidentService.delete(id);
+        if (!isDeleted) {
+            model.addAttribute("message", "Автопроишествие с указанным идентификатором не найдено !");
+            return "errors/404";
+        }
+        return "redirect:/index";
     }
 }

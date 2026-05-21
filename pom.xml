@@ -45,12 +45,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId><!-- можно использовать, пока нет hibernate -->
-            <artifactId>spring-boot-devtools</artifactId><!-- Быстрая "перезборка" Ctrl + F9 -->
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId><!-- Важно не забыть включить Annotation Processors -->
             <artifactId>lombok</artifactId>
             <version>1.18.34</version>
@@ -72,6 +66,18 @@
             <groupId>org.apache.commons</groupId><!-- Пул соединений с БД -->
             <artifactId>commons-dbcp2</artifactId>
             <version>2.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.11.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>5.3.23</version>
         </dependency>
 
     </dependencies>
