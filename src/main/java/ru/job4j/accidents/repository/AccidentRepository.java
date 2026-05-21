@@ -1,27 +1,16 @@
 package ru.job4j.accidents.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.repository.CrudRepository;
 import ru.job4j.accidents.model.Accident;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface AccidentRepository {
+public interface AccidentRepository extends CrudRepository<Accident, Integer> {
 
-    Accident add(Accident accident);
+    @EntityGraph(attributePaths = {"type", "rules"})
+    Iterable<Accident> findAll();
 
-    boolean update(Integer id, Accident accident);
-
-    boolean delete(Integer id);
-
-    List<Accident> findAll();
-
+    @EntityGraph(attributePaths = {"type", "rules"})
     Optional<Accident> findById(Integer id);
-
-    /* Нужно для удобства тестирования */
-    default void clearRepository() {
-        var accidents = findAll();
-        for (var oneAccident : accidents) {
-            delete(oneAccident.getId());
-        }
-    }
 }

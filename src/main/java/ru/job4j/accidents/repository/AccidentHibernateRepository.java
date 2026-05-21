@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 @Repository
 @AllArgsConstructor
-public class AccidentHibernateRepository implements AccidentRepository {
+public class AccidentHibernateRepository implements OldAccidentRepository {
 
     private final HbnCrudRepository hbnCrudRepository;
 

@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class AccidentJdbcTemplateRepository implements AccidentRepository {
+public class AccidentJdbcTemplateRepository implements OldAccidentRepository {
 
     private final JdbcTemplate jdbcTemplate;
 

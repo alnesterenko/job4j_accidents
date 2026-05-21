@@ -1,41 +1,58 @@
 package ru.job4j.accidents.service;
 
-import net.jcip.annotations.ThreadSafe;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.repository.AccidentHibernateRepository;
 import ru.job4j.accidents.repository.AccidentRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
+import java.util.stream.StreamSupport;
 
-@ThreadSafe
 @Service
+@AllArgsConstructor
 public class SimpleAccidentService implements AccidentService {
 
     private final AccidentRepository accidentRepository;
 
-    public SimpleAccidentService(AccidentRepository accidentHibernateRepository) {
-        this.accidentRepository = accidentHibernateRepository;
-    }
+    private static Logger logger = Logger.getLogger(AccidentHibernateRepository.class.getName());
 
     @Override
     public Accident add(Accident accident) {
-        return accidentRepository.add(accident);
+        return accidentRepository.save(accident);
     }
 
     @Override
     public boolean update(Integer id, Accident accident) {
-        return accidentRepository.update(id, accident);
+        accident.setId(id);
+        boolean success = true;
+        try {
+            accidentRepository.save(accident);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            success = false;
+        }
+        return success;
     }
 
     @Override
     public boolean delete(Integer id) {
-        return accidentRepository.delete(id);
+        boolean success = true;
+        try {
+            accidentRepository.deleteById(id);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            success = false;
+        }
+        return success;
     }
 
     @Override
     public List<Accident> findAll() {
-        return accidentRepository.findAll();
+        var iterable = accidentRepository.findAll();
+        return StreamSupport.stream(iterable.spliterator(), false).toList();
     }
 
     @Override

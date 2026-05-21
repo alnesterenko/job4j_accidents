@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 @Repository
-public class AccidentMem implements AccidentRepository {
+public class AccidentMem implements OldAccidentRepository {
 
     private final AccidentTypeRepository typeRepository;
 
