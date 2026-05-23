@@ -1,5 +1,6 @@
 package ru.job4j.accidents.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,26 +10,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.sql.DataSource;
+
 @Configuration
+@AllArgsConstructor
 public class SecurityConfiguration {
+
+    private final DataSource ds;
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(encoder.encode("123456"))
-                .roles("USER")
-                .build();
-
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(encoder.encode("123456"))
-                .roles("USER", "ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(ds);
+        if (!userDetailsManager.userExists("user")) {
+            UserDetails user = User.builder()
+                    .username("user")
+                    .password(encoder.encode("123456"))
+                    .roles("USER")
+                    .build();
+            userDetailsManager.createUser(user);
+        }
+        return userDetailsManager;
     }
 
     @Bean
