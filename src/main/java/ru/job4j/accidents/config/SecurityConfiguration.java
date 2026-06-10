@@ -7,9 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -43,8 +40,8 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(customizer -> customizer
-                        .requestMatchers("/login", "/registration").permitAll()
+        return http.authorizeRequests(customizer -> customizer
+                        .antMatchers("/login", "/registration").permitAll()
                         .anyRequest().hasAnyRole("ADMIN", "USER"))
                 .formLogin(customizer -> customizer
                         .loginPage("/login")
@@ -66,6 +63,6 @@ public class SecurityConfiguration {
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/images/logo/**");
+        return (web) -> web.ignoring().antMatchers("/css/**", "/js/**", "/images/logo/**");
     }
 }

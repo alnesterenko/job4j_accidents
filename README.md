@@ -22,7 +22,7 @@
 
 Java 17,<br/>
 maven 3.9.5,<br/>
-Spring Boot 3.4,<br/>
+Spring Boot 2.6.12,<br/>
 Thymeleaf 3.4,<br/>
 Bootstrap 4.1.3,<br/>
 <!-- 
