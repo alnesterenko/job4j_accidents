@@ -51,6 +51,8 @@ public class SecurityConfiguration {
                 .logout(customizer -> customizer
                         .logoutSuccessUrl("/login?logout=true")
                         .invalidateHttpSession(true)
+                        .clearAuthentication(true) /* Закрыть дыру в безопасности */
+                        .deleteCookies("JSESSIONID") /* так и не получилось */
                         .permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();

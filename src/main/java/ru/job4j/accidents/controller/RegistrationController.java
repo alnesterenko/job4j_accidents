@@ -1,12 +1,12 @@
 package ru.job4j.accidents.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.User;
 import ru.job4j.accidents.repository.AuthorityRepository;
 import ru.job4j.accidents.repository.UserRepository;
@@ -34,13 +34,19 @@ public class RegistrationController {
         user.setEnabled(true);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setAuthority(authorityOptional.get());
-        users.save(user);
+        try {
+            users.save(user);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("message", "Пользователь с таким именем уже существует");
+            model.addAttribute("user", new User());
+            return "errors/404";
+        }
         return "redirect:/login";
     }
 
     @GetMapping("/registration")
     public String regPage(Model model) {
         model.addAttribute("pageTitle", "Регистрация");
-        return "registration";
+        return "user/registration";
     }
 }

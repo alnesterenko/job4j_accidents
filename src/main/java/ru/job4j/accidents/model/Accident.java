@@ -37,6 +37,13 @@ public class Accident {
     )
     private Set<Rule> rules = new HashSet<>();
 
+    public Accident(String name, String text, String address, AccidentType type) {
+        this.name = name;
+        this.text = text;
+        this.address = address;
+        this.type = type;
+    }
+
     public void addRule(Rule rule) {
         if (getRules() == null) {
             setRules(new HashSet<>());
